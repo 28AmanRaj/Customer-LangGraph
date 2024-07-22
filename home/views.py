@@ -4,6 +4,7 @@ from django.shortcuts import render, HttpResponse
 from concurrent.futures import ThreadPoolExecutor
 from home.mongo_models import Company
 from home.loaders.url import rag_url
+from home.loaders.pdf import rag_pdf
 from django.http import JsonResponse
 #from home.agent import value
 from home.models import File
@@ -53,7 +54,9 @@ def chatbot(request):
             )
             file_record.save()
             print('D')
-            
+            rag_pdf(new_filename)
+
+            print("E")
             return JsonResponse({"response": "Form submitted successfully"})
 
         except Exception as e:

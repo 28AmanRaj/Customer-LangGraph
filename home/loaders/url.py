@@ -49,7 +49,7 @@ def rag_url(url):
     )
     #doc_splits = [text_splitter.split_text(preprocess_text(docs_list[2]))]
     docs = [{"page_content": txt} for txt in text_splitter.split_text(preprocess_text(docs_list[2]))]
-    print("4")
+    print("4",docs)
     class VectorStoreRetriever:
         def __init__(self, docs: list, vectors: list, oai_client):
             self._arr = np.array(vectors)
@@ -81,13 +81,13 @@ def rag_url(url):
 
     # Function to lookup policy
     @tool
-    def lookup_policy(query: str) -> str:
+    def lookup_url(query: str) -> str:
         """Consult the company policies to check whether certain options are permitted.
         Use this before answering a relevant question."""
         docs = retriever.query(query, k=2)
         return "\n\n".join([doc["page_content"] for doc in docs])
     
-    tools.append(lookup_policy)
+    tools.append(lookup_url)
     tool_set(tools)
 
 

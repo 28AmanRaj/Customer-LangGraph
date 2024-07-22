@@ -70,7 +70,7 @@ def tool_set(tool):
     print("tools in Agent State",tool)
     for x in tool:
         final_tools.append(x)
-print("Final_Tool",final_tools)        
+    print("Final_Tool",final_tools)        
 
 def assistant_set():
     print("Final tools while setting assistant is:",final_tools)
