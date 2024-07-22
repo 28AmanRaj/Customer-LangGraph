@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinal</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <div class="branding">
+                <img src="../static/images/logo.png" alt="Replit Logo">
+            </div>
+            <h1>Customer Support, Sentinal</h1>
+            <ul class="features">
+                <li>🚀 customer Support on the go</li>
+                <li>⚡ Save Time With Sentinal</li>
+                <li>👥 Simple Steps</li>
+                <li>🌐 Join the community</li>
+            </ul>
+        </div>
+        <div class="right-section">
+            <form id="taskForm" action="/chatbot" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2>Enter The Required Details</h2>
+                <div class="input-box">
+                    <label for="companyName" style="font-weight: bold; color: rgb(0, 0, 0);">Company Name:</label>
+                    <input type="text" id="companyName" name="companyName" required>
+                </div>
+                <div class="input-box">
+                    <label for="companyLink" style="font-weight: bold; color: rgb(0, 0, 0);">Company Link:</label>
+                    <input type="url" id="companyLink" name="companyLink" required>
+                </div>
+                <div class="input-box">
+                    <label for="fileType" style="font-weight: bold; color: rgb(0, 0, 0);">File Type:</label>
+                    <div class="dropdown">
+                        <input type="checkbox" id="dropdown">
+                        <label class="dropdown__face" for="dropdown">
+                            <div class="dropdown__text" id="dropdownText">Select file type</div>
+                            <div class="dropdown__arrow"></div>
+                        </label>
+                        <ul class="dropdown__items">
+                            <li onclick="selectFileType('PDF')" style="font-weight: bold; color: rgb(0, 0, 0);">PDF</li>
+                            <li onclick="selectFileType('DOCX')" style="font-weight: bold; color: rgb(0, 0, 0);">DOCX</li>
+                            <li onclick="selectFileType('TXT')" style="font-weight: bold; color: rgb(0, 0, 0);">TXT</li>
+                        </ul>
+                    </div>
+                </div>
+                <input type="hidden" id="fileType" name="fileType" required>
+                <div class="input-box">
+                    <label for="fileInput" style="font-weight: bold; color: rgb(0, 0, 0);">Upload File:</label>
+                    <input type="file" id="fileInput" name="fileInput" required>
+                </div>
+                <div id="errorMessage" style="color: red;"></div>
+                <button type="submit" class="button-3">Continue to Chatbot</button>
+            </form>          
+        </div>
+    </div>
+
+    <script>
+        function selectFileType(type) {
+            document.getElementById('fileType').value = type;
+            document.getElementById('dropdownText').innerText = type;
+            document.getElementById('dropdown').checked = false;
+    
+            const fileInput = document.getElementById('fileInput');
+            fileInput.value = ''; // Clear the file input
+            fileInput.setAttribute('accept', `.${type.toLowerCase()}`);
+        }
+    
+        async function submitForm(event) {
+            event.preventDefault(); // Prevent the default form submission
+    
+            const companyName = document.getElementById('companyName').value.trim();
+            const companyLink = document.getElementById('companyLink').value.trim();
+            const fileType = document.getElementById('fileType').value.trim().toLowerCase();
+            const fileInput = document.getElementById('fileInput');
+            const fileName = fileInput.value.toLowerCase();
+    
+            // Elements for displaying messages
+            const errorMessage = document.getElementById('errorMessage');
+    
+            // Clear previous messages
+            errorMessage.innerText = '';
+    
+            if (!fileName.endsWith(`.${fileType}`)) {
+                errorMessage.innerText = `Please upload a ${fileType.toUpperCase()} file.`;
+                return;
+            }
+    
+            const formData = new FormData(document.getElementById('taskForm'));
+            
+            // Get the CSRF token value
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+            // Fetch request to handle form submission
+            try {
+                const response = await fetch('/chatbot', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: formData
+                });
+    
+                if (response.ok) {
+                    // Immediately redirect to the chatbot page
+                    window.location.href = "/chatbot";
+                } else {
+                    errorMessage.innerText = 'Failed to submit form. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.innerText = 'Failed to submit form. Please try again.';
+            }
+        }
+    
+        document.getElementById('taskForm').addEventListener('submit', submitForm);
+    </script>    
+</body>
+</html>
