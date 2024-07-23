@@ -18,15 +18,25 @@ config = {
 
 
  
+# def customer_support(msg):
+#     _printed = set()
+#     print("1")
+#     part_1_graph = tool_set2()
+#     events = part_1_graph.stream(
+#         {"messages": ("user", msg)}, config, stream_mode="values"
+#     )
+#     for event in events:
+#         _print_event(event, _printed)
+#         #return event
+
 def customer_support(msg):
     _printed = set()
-    print("1")
     part_1_graph = tool_set2()
     events = part_1_graph.stream(
         {"messages": ("user", msg)}, config, stream_mode="values"
     )
+    response = ""
     for event in events:
-        _print_event(event, _printed)
-        #return event
-
+        response += _print_event(event, _printed)
+    return response
 
