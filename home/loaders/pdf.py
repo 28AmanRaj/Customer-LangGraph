@@ -1,9 +1,9 @@
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-import numpy as np
+from home.utilities import VectorStoreRetriever
 import openai
 from langchain_core.tools import tool
-from home.lgraph.AgentState import tool_set
+from home.agent_structure.assistant import tool_set
 import boto3
 import PyPDF2
 from io import BytesIO
@@ -58,32 +58,6 @@ def rag_pdf(file_key):
     for x in docs_list:
         docs = [{"page_content": txt} for txt in text_splitter.split_text(x)]
     print("4",docs)
-    class VectorStoreRetriever:
-        def __init__(self, docs: list, vectors: list, oai_client):
-            self._arr = np.array(vectors)
-            self._docs = docs
-            self._client = oai_client
-        print("5")
-        @classmethod
-        def from_docs(cls, docs, oai_client):
-            embeddings = oai_client.embeddings.create(
-                model="text-embedding-3-small", input=[doc["page_content"] for doc in docs]
-            )
-            vectors = [emb.embedding for emb in embeddings.data]
-            return cls(docs, vectors, oai_client)
-        print("6")
-        def query(self, query: str, k: int = 5) -> list[dict]:
-            embed = self._client.embeddings.create(
-                model="text-embedding-3-small", input=[query]
-            )
-            # "@" is just a matrix multiplication in python
-            scores = np.array(embed.data[0].embedding) @ self._arr.T
-            k = min(k, len(scores))
-            top_k_idx = np.argpartition(scores, -k)[-k:]
-            top_k_idx_sorted = top_k_idx[np.argsort(-scores[top_k_idx])]
-            return [
-                {**self._docs[idx], "similarity": scores[idx]} for idx in top_k_idx_sorted
-            ]
 
     print("7")
     retriever = VectorStoreRetriever.from_docs(docs, openai.Client())
@@ -91,7 +65,7 @@ def rag_pdf(file_key):
     # Function to lookup policy
     @tool
     def lookup_pdf(query: str) -> str:
-        """Check to see if the content is relevant to users query and use to answer the question."""
+        """Use this if a Question about password is asked."""
         docs = retriever.query(query, k=2)
         return "\n\n".join([doc["page_content"] for doc in docs])
     

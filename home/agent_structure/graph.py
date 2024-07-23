@@ -1,19 +1,12 @@
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import END, StateGraph, START
 from langgraph.prebuilt import tools_condition
-from home.lgraph.AgentState import final_tools
+from home.agent_structure.assistant import final_tools
 from home.utilities import create_tool_node_with_fallback
-from home.lgraph.AgentState import Assistant,assistant_set,State
-from home.lgraph.AgentState import tool_set
+from home.agent_structure.assistant import Assistant,assistant_set,State
 
 
-def tool_set2():
-    '''
-    if not final_tools:
-        print("Final tool  NOT SET:", final_tools)
-        tool_set()
-        print("Final tool  NOT SET 2:", final_tools)
-    '''
+def graph_struct():
     builder = StateGraph(State)
 
     # Define nodes: these do the work
