@@ -1,6 +1,7 @@
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from home.utilities import VectorStoreRetriever
+from home.utilities import VectorStoreRetriever,set_docstring
+from home.loaders.desc import fetch_summarize
 import openai
 from langchain_core.tools import tool
 from home.agent_structure.assistant import tool_set
@@ -58,16 +59,29 @@ def rag_pdf(file_key):
     for x in docs_list:
         docs = [{"page_content": txt} for txt in text_splitter.split_text(x)]
     print("4",docs)
-
+    summary=fetch_summarize(docs)
+    print("file summ===",summary)
     print("7")
     retriever = VectorStoreRetriever.from_docs(docs, openai.Client())
 
     # Function to lookup policy
-    @tool
+    # @tool
+    # def lookup_pdf(query: str) -> str:
+    #     """Use this if a Question about password is asked."""
+    #     docs = retriever.query(query, k=2)
+    #     return "\n\n".join([doc["page_content"] for doc in docs])
     def lookup_pdf(query: str) -> str:
-        """Use this if a Question about password is asked."""
+        # global summary
+        # print("SUMMM1 :",summary)
+        # f"""{summary}"""
+        # print("SUMMM :",summary)
         docs = retriever.query(query, k=2)
         return "\n\n".join([doc["page_content"] for doc in docs])
+    
+    lookup_pdf = set_docstring(summary)(lookup_pdf)
+    # print("set_docstring :",lookup_url)
+    lookup_pdf = tool(lookup_pdf)    
+    
     
     tools.append(lookup_pdf)
     tool_set(tools)

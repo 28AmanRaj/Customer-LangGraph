@@ -31,6 +31,7 @@
                 <div class="input-box">
                     <label for="companyLink" style="font-weight: bold; color: rgb(0, 0, 0);">Company Link:</label>
                     <input type="url" id="companyLink" name="companyLink" required>
+            
                 </div>
                 <div class="input-box">
                     <label for="fileType" style="font-weight: bold; color: rgb(0, 0, 0);">File Type:</label>
@@ -47,10 +48,10 @@
                         </ul>
                     </div>
                 </div>
-                <input type="hidden" id="fileType" name="fileType" required>
+                <input type="hidden" id="fileType" name="fileType" >
                 <div class="input-box">
                     <label for="fileInput" style="font-weight: bold; color: rgb(0, 0, 0);">Upload File:</label>
-                    <input type="file" id="fileInput" name="fileInput" required>
+                    <input type="file" id="fileInput" name="fileInput" >
                 </div>
                 <div id="errorMessage" style="color: red;"></div>
                 <button type="submit" class="button-3">Continue to Chatbot</button>
@@ -74,6 +75,7 @@
     
             const companyName = document.getElementById('companyName').value.trim();
             const companyLink = document.getElementById('companyLink').value.trim();
+            
             const fileType = document.getElementById('fileType').value.trim().toLowerCase();
             const fileInput = document.getElementById('fileInput');
             const fileName = fileInput.value.toLowerCase();

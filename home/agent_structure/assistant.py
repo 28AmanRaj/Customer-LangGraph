@@ -5,8 +5,8 @@ from langchain_core.messages.utils import AnyMessage
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable, RunnableConfig
-
-#from home.loaders.url import tools
+# from loaders.url import lookup_policy
+# from home.loaders.url import tools
 
 final_tools = []
 
@@ -44,20 +44,29 @@ llm = ChatOpenAI(temperature=0, model="gpt-4-0125-preview", streaming=True)
 # You could swap LLMs, though you will likely want to update the prompts when
 # doing so!
 # from langchain_openai import ChatOpenAI
-
 # llm = ChatOpenAI(model="gpt-4-turbo-preview")
 
 primary_assistant_prompt = ChatPromptTemplate.from_messages(
     [
+
         (
             "system",
-            "You are a helpful customer support assistant for a Company. "
-            " Use the provided tools to search for company policies, and other information to assist the user's queries. "
-            " When searching, be persistent. Expand your query bounds if the first search returns no results. "
-            " If a search comes up empty, expand your search before giving up."
-            "\n\nCurrent user:\n\n{user_info}\n",
+            # "You are a grader assessing relevance of a retrieved document to a user question. \n "
+            # "Here is the retrieved document: \n\n {context} \n\n"
+            # "Here is the user question: {question} \n "
+            "Use the provided tools to search for company policies and other information to assist the user's queries."
+            "When searching, be persistent."    
+            #"Expand your query bounds if the first search returns no results."
+            #"If a search comes up empty, expand your search before giving up."
+            "The only source of information is the documents provided,do not anwser on information other than provided."
+            "Always ensure your responses remain relevant to the provided documents and company information."
+            # "If a user's query is out of context or not covered by the provided documents, politely inform the user that you can only assist with questions related to the available information."
+            # "\n\nCurrent user:\n\n{user_info}\n",
         ),
         ("placeholder", "{messages}"),
+        # [
+        #     ("human", "Retrieved document: \n\n {document} \n\n User question: {question}"),
+        # ]
     ]
 ).partial()
 
