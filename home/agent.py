@@ -21,15 +21,44 @@ config = {
 
 
  
-def customer_support(part_1_grap,msg):
+# def customer_support(part_1_grap,msg):
+#     _printed = set()
+#     print("1")
+#     events = part_1_grap.stream(
+#         {"messages": ("user", msg)}, config ,stream_mode="values"
+#     )
+#     for event in events:
+#         _print_event(event, _printed)
+#         #return event
+#         print("EVENTS:",event)
+def clean_chatbot_response(response):
+    start_marker = "==================================\x1b[1m Ai Message \x1b[0m=================================="
+    # Remove the start marker and any leading/trailing whitespace
+    cleaned_response = response.replace(start_marker, "").strip()
+    return cleaned_response
+
+
+def customer_support(part_1_grap, msg):
     _printed = set()
-    print("1")
+    print("Starting customer support function")
+    
     events = part_1_grap.stream(
-        {"messages": ("user", msg)}, config ,stream_mode="values"
+        {"messages": ("user", msg)}, config, stream_mode="values"
     )
+
+    print("Events stream received")
+    last_event = None
     for event in events:
-        _print_event(event, _printed)
-        #return event
+        print("Processing event:", event)
+        last_event = event
+
+    if last_event:
+        html_message = _print_event(last_event, _printed)
+        print("EVENTS:", last_event)
+        x=clean_chatbot_response(html_message)
+        return x
+    else:
+        return ""
 
 
 @csrf_exempt
