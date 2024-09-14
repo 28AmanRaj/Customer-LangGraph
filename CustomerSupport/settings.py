@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import mongoengine
+from mongoengine import connect
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 ]
 
 # Use MongoEngine for database operations
-mongoengine.connect(
+connect(
     db='CustomerSupport',        # Replace with your MongoDB database name
     username='sarshi123',        # Replace with your MongoDB username
     password='sarshi123',        # Replace with your MongoDB password
