@@ -69,7 +69,7 @@ def rag_url(url):
     #     def decorator(func):
     #         func.__doc__ = docstring
     #         return func
-    #     return decorator
+    #     return decoratora
 
     #@set_docstring(summary)
     #@tool

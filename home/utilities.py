@@ -4,7 +4,7 @@ from langchain_core.messages import ToolMessage
 from langchain_core.runnables import RunnableLambda
 from langgraph.prebuilt import ToolNode
 import numpy as np
-from home.models import File
+from home.models_django import File
 from django import forms
 
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
@@ -135,4 +135,4 @@ def set_docstring(docstring):
 
 class KValueForm(forms.Form):
     k_value = forms.IntegerField(label='Number of Documents to Retrieve', min_value=1)
-    temperature = forms.FloatField(label='Temperature for Summarization', min_value=0.0, max_value=1.0, initial=0.7)
+    temperature = forms.FloatField(label='Temperature for Summarization', min_value=0.0, max_value=1.0, initial=0.0)

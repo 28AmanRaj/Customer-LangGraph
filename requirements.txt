@@ -65,7 +65,7 @@ MarkupSafe==2.1.5
 marshmallow==3.21.3
 mdurl==0.1.2
 mmh3==4.1.0
-mongoengine==0.28.2
+mongoengine==0.29.0
 monotonic==1.6
 mpmath==1.3.0
 multidict==6.0.5

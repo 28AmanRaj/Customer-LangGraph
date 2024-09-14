@@ -1,15 +1,17 @@
-from typing import Annotated
+from typing import Annotated, Optional
 from typing_extensions import TypedDict
 from langgraph.graph.message import add_messages
 from langchain_core.messages.utils import AnyMessage
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable, RunnableConfig
+from typing import Union, List, Tuple
 
 final_tools = []
 
 class State(TypedDict):
-    messages: Annotated[list[AnyMessage], add_messages]
+    messages: Annotated[List[Union[AnyMessage, Tuple[str, str]]], add_messages]
+    user_info: Optional[str]
 
 class Assistant:
     def __init__(self, runnable: Runnable):
@@ -31,6 +33,7 @@ class Assistant:
             else:
                 break
         return {"messages": result}
+
 
 primary_assistant_prompt = ChatPromptTemplate.from_messages(
     [

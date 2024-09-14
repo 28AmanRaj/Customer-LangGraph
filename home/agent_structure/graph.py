@@ -27,7 +27,7 @@ def graph_struct():
     builder.add_edge("tools", "assistant")
     # The checkpointer lets the graph persist its state
     # this is a complete memory for the entire graph.
-    memory = SqliteSaver.from_conn_string(":memory:")
-    part_1_graph = builder.compile(checkpointer=memory)
+    with SqliteSaver.from_conn_string(":memory:") as checkpointer:
+        part_1_graph = builder.compile(checkpointer=checkpointer)
 
     return part_1_graph

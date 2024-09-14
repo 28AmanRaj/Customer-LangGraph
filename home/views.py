@@ -3,7 +3,7 @@ from home.loaders.url import rag_url
 from home.loaders.pdf import rag_pdf
 from django.http import JsonResponse
 from home.utilities import upload_file_to_S3, KValueForm
-from home.models import Company
+from home.models_mongo import Company
 from home.agent_structure.graph import graph_struct
 from home.agent_structure.assistant import Assistant, assistant_set
 
