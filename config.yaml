@@ -1,0 +1,7 @@
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set environment variables
+        run: |
+          echo "DJANGO_SETTINGS_MODULE=CUSTOMERSUPPORT.settings" >> $GITHUB_ENV
